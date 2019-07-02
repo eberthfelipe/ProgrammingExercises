@@ -8,42 +8,41 @@ public class Exercises {
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
 
-		int[][] arr = new int[6][6];
+		String[] nd = scanner.nextLine().split(" ");
 
-        for (int i = 0; i < 6; i++) {
-            String[] arrRowItems = scanner.nextLine().split(" ");
-            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        int n = Integer.parseInt(nd[0]);
 
-            for (int j = 0; j < 6; j++) {
-                int arrItem = Integer.parseInt(arrRowItems[j]);
-                arr[i][j] = arrItem;
-            }
+        int d = Integer.parseInt(nd[1]);
+
+        int[] a = new int[n];
+
+        String[] aItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < n; i++) {
+            int aItem = Integer.parseInt(aItems[i]);
+            a[i] = aItem;
         }
-		
 
-        System.out.println(hourglassSum(arr));
+        leftRotation(n, d, a);
+
 		scanner.close();
 	}
 
-	// Complete the reverseArray function below.
-	static int hourglassSum(int[][] arr) {
-		int maxValue = -99999;
-		int aux;
-		for (int i = 1; i < arr.length-1; i++) {
-			for (int j = 1; j < arr.length-1; j++) {
-				aux = 0;
-				aux += arr[j-1][i-1];
-				aux += arr[j-1][i];
-				aux += arr[j-1][i+1];
-				aux += arr[j][i];
-				aux += arr[j+1][i-1];
-				aux += arr[j+1][i];
-				aux += arr[j+1][i+1];
-				if(aux>maxValue)
-					maxValue = aux;
-			}
+	static void leftRotation(int n, int d, int[] array) {
+		int[] auxArray = new int[n];
+		int pos;
+		if(d >= n)
+			d -= n;
+		for (int i = 0; i < array.length; i++) {
+			pos = n-d+i;
+			if(pos>=array.length)
+				pos-=array.length;
+			auxArray[pos] = array[i];
 		}
-		return maxValue;
+		for (int i = 0; i < auxArray.length; i++) {
+			System.out.print(auxArray[i] + " ");
+		}
 	}
 
 
