@@ -8,37 +8,42 @@ public class Exercises {
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
 
-		int arrCount = scanner.nextInt();
-		scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+		int[][] arr = new int[6][6];
+
+        for (int i = 0; i < 6; i++) {
+            String[] arrRowItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int j = 0; j < 6; j++) {
+                int arrItem = Integer.parseInt(arrRowItems[j]);
+                arr[i][j] = arrItem;
+            }
+        }
 		
-		int[] arr = new int[arrCount];
-		String[] arrItems = scanner.nextLine().split(" ");
 
-		for (int i = 0; i < arrCount; i++) {
-			int arrItem = Integer.parseInt(arrItems[i]);
-			arr[i] = arrItem;
-		}
-
-		int[] res = reverseArray(arr);
-
-		for (int i = 0; i < res.length; i++) {
-			System.out.print(String.valueOf(res[i]));
-			if (i != res.length - 1) {
-				System.out.print(" ");
-			}
-		}
+        System.out.println(hourglassSum(arr));
 		scanner.close();
 	}
 
 	// Complete the reverseArray function below.
-	static int[] reverseArray(int[] a) {
-		int[] reverseArray = new int[a.length];
-		int lastPosition = a.length-1;
-		for(int i=0; i<a.length; i++){
-			reverseArray[i] = a[lastPosition];
-			lastPosition--;
+	static int hourglassSum(int[][] arr) {
+		int maxValue = -99999;
+		int aux;
+		for (int i = 1; i < arr.length-1; i++) {
+			for (int j = 1; j < arr.length-1; j++) {
+				aux = 0;
+				aux += arr[j-1][i-1];
+				aux += arr[j-1][i];
+				aux += arr[j-1][i+1];
+				aux += arr[j][i];
+				aux += arr[j+1][i-1];
+				aux += arr[j+1][i];
+				aux += arr[j+1][i+1];
+				if(aux>maxValue)
+					maxValue = aux;
+			}
 		}
-		return reverseArray;
+		return maxValue;
 	}
 
 
