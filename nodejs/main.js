@@ -1,7 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-
 process.stdin.resume();
 process.stdin.setEncoding('utf-8');
 
@@ -13,43 +11,60 @@ process.stdin.on('data', inputStdin => {
 });
 
 process.stdin.on('end', _ => {
-    inputString = inputString.replace(/\s*$/, '')
-        .split('\n')
-        .map(str => str.replace(/\s*$/, ''));
-
-    main();
+    inputString = inputString.trim().split('\n').map(string => {
+        return string.trim();
+    });
+    
+    main();    
 });
 
 function readLine() {
     return inputString[currentLine++];
 }
 
-// Complete the marsExploration function below.
-function marsExploration(s) {
-    const SOS = "SOS";
-    const maxSize = 3;
-    let count = 0;
-    for(let i=0; i < s.length/maxSize; i++){
-        let current = s.substr(i*maxSize, maxSize).split(""); 
-        //console.log(current);
-        if(current[0] != 'S')
-            count++;
-        if(current[2] != 'S')
-            count++;
-        if(current[1] != 'O')
-            count++;
+function getMaxLessThanKRecursive(n, k, init, maxCurrent){
+    let bitwise;
+    for(let i=init+1; i <= n; i++){
+        if(maxCurrent == (k-1))
+            return maxCurrent;
+        bitwise = init & i;
+        //console.log(init , ' & ', i, ' = ', bitwise);
+        if(bitwise < k && bitwise > maxCurrent){
+            maxCurrent = bitwise;
+            //console.log('NEW biggest < ', k, ' = ', maxCurrent);
+        }
     }
-    return count;
+    if(init == (n-1))
+        return maxCurrent;
+    else 
+        return getMaxLessThanK(n, k, ++init, maxCurrent);
+}
+
+function getMaxLessThanK(n, k){
+    let bitwise;
+    let init=1, maxCurrent=0;
+    do {
+        for(let i=init+1; i <= n; i++){
+            if(maxCurrent == (k-1))
+                return maxCurrent;
+            bitwise = init & i;
+            //console.log(init , ' & ', i, ' = ', bitwise);
+            if(bitwise < k && bitwise > maxCurrent){
+                maxCurrent = bitwise;
+                //console.log('NEW biggest < ', k, ' = ', maxCurrent);
+            }
+        }
+        init++;
+    } while (init < n);
+    return maxCurrent;
 }
 
 function main() {
-    //const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
-
-    const s = readLine();
-
-    let result = marsExploration(s);
-    console.log(result);
-    //ws.write(result + "\n");
-
-    //ws.end();
+    const q = +(readLine());
+    
+    for (let i = 0; i < q; i++) {
+        const [n, k] = readLine().split(' ').map(Number);
+        
+        console.log(getMaxLessThanK(n, k));
+    }
 }
